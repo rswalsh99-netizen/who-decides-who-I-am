@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Decides Who I Am? SDA by Rachel Walsh</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@400;600;700&family=Gaegu:wght@300;400;700&family=Indie+Flower&family=Architects+Daughter&family=Schoolbell&display=swap');
+
+  :root {
+    --paper-cream:#FFF8E7;--pencil-grey:#4A4A4A;--crayon-red:#D03E2F;
+    --crayon-blue:#2E6BB0;--crayon-green:#3D8B37;--crayon-yellow:#D4A017;
+    --crayon-purple:#6D3FC0;--crayon-orange:#C97A12;--crayon-pink:#C03075;
+    --ink-dark:#2C2C2C;--notebook-margin:#D4878F;--sticker-shadow:rgba(0,0,0,0.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Patrick Hand',cursive;background:var(--paper-cream);color:var(--ink-dark);overflow-x:hidden;}
+
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 20px;position:relative;}
+  .section-inner{max-width:850px;width:100%;position:relative;z-index:2;}
+  h1,h2,h3{font-family:'Caveat',cursive;color:var(--pencil-grey);}
+
+  .fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+
+  #title-section{background:var(--paper-cream);overflow:hidden;}
+  #title-section::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(transparent,var(--paper-cream));pointer-events:none;}
+  .main-title{font-family:'Caveat',cursive;font-size:clamp(3rem,8vw,5.5rem);font-weight:700;color:var(--pencil-grey);line-height:1.1;margin-bottom:8px;text-shadow:2px 2px 0px rgba(0,0,0,0.05);text-align:center;}
+  .subtitle{font-family:'Indie Flower',cursive;font-size:clamp(1rem,3vw,1.5rem);color:var(--crayon-red);margin-bottom:20px;transform:rotate(-1deg);text-align:center;}
+  .author-note{font-size:1.1rem;color:#777;margin-top:12px;text-align:center;}
+  .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-size:1rem;color:#aaa;animation:bobble 2s ease-in-out infinite;z-index:10;}
+  .scroll-hint span{display:block;font-size:1.5rem;margin-top:4px;}
+  @keyframes bobble{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+  .doodle-star{position:absolute;font-size:2rem;opacity:0.12;pointer-events:none;animation:twinkle 3s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.12;transform:scale(1) rotate(0deg);}50%{opacity:0.2;transform:scale(1.1) rotate(10deg);}}
+
+  .notebook-card{max-width:720px;margin:0 auto 40px;background:white;border:1px solid #ddd;border-radius:2px;padding:40px 40px 40px 80px;position:relative;box-shadow:4px 4px 0px rgba(0,0,0,0.05);background-image:repeating-linear-gradient(transparent,transparent 31px,#E8E2F0 31px,#E8E2F0 32px);}
+  .notebook-card::before{content:'';position:absolute;left:60px;top:0;bottom:0;width:2px;background:var(--notebook-margin);opacity:0.4;}
+  .notebook-card::after{content:'';position:absolute;top:6px;left:8px;width:20px;height:20px;border-radius:50%;border:2px solid #ccc;background:var(--paper-cream);}
+  .notebook-card h2{font-size:1.8rem;margin-bottom:16px;color:var(--crayon-blue);}
+  .notebook-card p{font-size:1.05rem;line-height:1.75;color:var(--pencil-grey);margin-bottom:12px;}
+  .notebook-card em{color:var(--crayon-red);font-style:normal;background:rgba(208,62,47,0.08);padding:0 4px;border-radius:2px;}
+
+  .dictionary-card{max-width:620px;margin:0 auto 40px;background:#FFFEF8;border:1px solid #C8B8A0;border-radius:2px;padding:32px 36px;position:relative;box-shadow:2px 3px 6px rgba(0,0,0,0.06);font-family:Georgia,'Times New Roman',serif;}
+  .dictionary-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:2px;background:var(--pencil-grey);}
+  .dictionary-card::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60%;height:2px;background:var(--pencil-grey);}
+  .dict-headword{font-size:1.6rem;font-weight:bold;color:var(--ink-dark);margin-bottom:2px;letter-spacing:0.5px;}
+  .dict-phonetic{font-size:1rem;color:#888;font-style:italic;margin-bottom:10px;}
+  .dict-pos{font-style:italic;color:#666;font-size:0.95rem;}
+  .dict-sense-num{font-weight:bold;color:var(--ink-dark);margin-right:6px;}
+  .dict-definition{font-size:1.02rem;line-height:1.7;color:#333;margin-bottom:6px;padding-left:20px;}
+  .dict-label{font-style:italic;color:#888;font-size:0.9rem;}
+  .dict-source{font-size:0.82rem;color:#aaa;text-align:right;margin-top:12px;font-family:'Patrick Hand',cursive;}
+
+  .rt-callout{max-width:620px;margin:20px auto 0;background:#F9F6EE;border:2px solid #E8DCC8;border-left:4px solid var(--crayon-purple);border-radius:0 6px 6px 0;padding:14px 18px;font-family:'Gaegu',cursive;font-size:0.98rem;color:var(--pencil-grey);line-height:1.55;}
+  .rt-callout .rt-icon{margin-right:6px;}
+  .rt-callout .rt-note{font-family:'Indie Flower',cursive;font-size:0.82rem;color:#999;margin-top:6px;}
+
+  .meter-container{position:sticky;top:16px;z-index:50;max-width:500px;margin:0 auto 20px;background:rgba(255,248,231,0.95);backdrop-filter:blur(6px);border:1px solid #E8DCC8;border-radius:10px;padding:10px 18px;box-shadow:2px 3px 8px rgba(0,0,0,0.06);display:none;}
+  .meter-container.active{display:block;}
+  .meter-label{font-family:'Caveat',cursive;font-size:1.1rem;color:var(--pencil-grey);display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+  .meter-bar-bg{height:14px;background:#E8DCC8;border-radius:7px;overflow:hidden;position:relative;}
+  .meter-bar-fill{height:100%;border-radius:7px;transition:width 0.8s ease,background 0.5s ease;width:0%;}
+  .meter-status{font-family:'Indie Flower',cursive;font-size:0.85rem;color:#777;text-align:center;margin-top:4px;min-height:20px;}
+
+  #schoolday-section{background:var(--paper-cream);padding:80px 20px;min-height:auto;}
+  .day-layout{display:flex;gap:36px;align-items:flex-start;justify-content:center;flex-wrap:wrap;}
+  .mannequin-area{width:240px;min-height:520px;position:relative;display:flex;flex-direction:column;align-items:center;position:sticky;top:100px;}
+  @media(max-width:900px){.mannequin-area{position:relative;top:0;}}
+  .mannequin-wrap{width:240px;height:480px;position:relative;}
+  .mannequin-svg{width:240px;height:480px;display:block;}
+  .garment{transition:opacity 0.5s ease;cursor:default;}
+  .garment text{font-family:'Patrick Hand',cursive;font-size:11px;pointer-events:none;fill:currentColor;}
+  .garment.tacit{opacity:0.55;}
+  .garment.lost{opacity:0.15;}
+  .garment.lost text{text-decoration:line-through;}
+  .garment.stigmatised .garment-shape{stroke:#D4A017;stroke-width:2;stroke-dasharray:5,3;}
+  @keyframes garmentAppear{0%{opacity:0;transform:scale(0.8);}100%{opacity:1;transform:scale(1);}}
+  .garment-appear{animation:garmentAppear 0.4s ease-out forwards;}
+  .worn-count{font-family:'Caveat',cursive;font-size:1.1rem;color:var(--crayon-purple);text-align:center;margin-top:8px;min-height:24px;}
+  .day-panel{flex:1;max-width:540px;min-width:280px;}
+
+  .period-card{background:white;border:2px solid #E8DCC8;border-radius:8px;margin-bottom:20px;overflow:hidden;box-shadow:3px 3px 0px rgba(0,0,0,0.04);transition:all 0.4s;}
+  .period-card.current{border-color:var(--crayon-blue);box-shadow:0 0 0 3px rgba(46,107,176,0.15);}
+  .period-card.completed{opacity:0.55;border-color:#ccc;}
+  .period-card.locked{opacity:0.35;pointer-events:none;}
+  .period-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;}
+  .period-header h3{font-size:1.2rem;margin:0;display:flex;align-items:center;gap:8px;}
+  .period-header .period-time{font-family:'Indie Flower',cursive;font-size:0.85rem;color:#999;}
+  .period-desc{font-family:'Indie Flower',cursive;font-size:0.88rem;color:#888;padding:0 18px 6px;line-height:1.4;}
+  .period-choices{padding:10px 16px 16px;display:flex;flex-wrap:wrap;gap:7px;}
+  .period-choices.hidden{display:none;}
+
+  .choice-item{font-family:'Patrick Hand',cursive;font-size:0.95rem;padding:8px 16px;border-radius:5px;cursor:pointer;user-select:none;transition:all 0.25s;border:2px solid transparent;position:relative;}
+  .choice-item:hover{transform:scale(1.05) rotate(-1deg);box-shadow:2px 3px 6px var(--sticker-shadow);border-color:rgba(0,0,0,0.15);}
+  .choice-item.chosen{border-color:var(--crayon-green);box-shadow:0 0 0 2px rgba(61,139,55,0.25);cursor:default;}
+  .choice-item.unchosen{opacity:0.25;transform:scale(0.92);cursor:default;}
+  .system-assigned{font-family:'Indie Flower',cursive;font-size:0.95rem;color:var(--crayon-red);text-align:center;padding:8px 18px 14px;display:none;}
+
+  .choice-item[data-cat="academic"]{background:#BDD5F5;color:#0F2744;}
+  .choice-item[data-cat="social"]{background:#F5C6DD;color:#5C0A2A;}
+  .choice-item[data-cat="extra"]{background:#B3E8C7;color:#0A3318;}
+  .choice-item[data-cat="system"]{background:#F5E088;color:#4A2900;}
+  .choice-item[data-cat="hidden"]{background:#D4B8F0;color:#2D0A54;}
+  .choice-item[data-cat="self"]{background:#F5C8A0;color:#4A1A00;}
+
+  .staffroom-card{max-width:620px;margin:24px auto;background:#FFFEF5;border:2px solid #D4C9B0;border-radius:6px;overflow:hidden;box-shadow:3px 3px 0 rgba(0,0,0,0.05);}
+  .staffroom-lid{padding:14px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#F5F0E4;transition:background 0.3s;user-select:none;}
+  .staffroom-lid:hover{background:#EDE8D8;}
+  .staffroom-lid h3{font-size:1.2rem;color:#6B3500;margin:0;}
+  .staffroom-contents{max-height:0;overflow:hidden;transition:max-height 0.6s ease;padding:0 20px;}
+  .staffroom-card.open .staffroom-contents{max-height:800px;padding:16px 20px 20px;}
+  .staffroom-entry{font-family:'Gaegu',cursive;font-size:1rem;color:var(--pencil-grey);padding:10px 14px;margin-bottom:10px;background:white;border-left:3px solid var(--crayon-purple);border-radius:0 4px 4px 0;line-height:1.6;}
+  .staffroom-entry .staff-author{font-family:'Patrick Hand',cursive;font-size:0.8rem;color:#999;margin-top:4px;}
+  .staffroom-theory{font-family:'Indie Flower',cursive;font-size:0.92rem;color:#555;padding:12px 14px;background:#F9F6EE;border-radius:6px;margin-top:8px;line-height:1.55;}
+
+  .freebox{background:white;border:2px solid #D4C9B0;border-radius:6px;margin-bottom:20px;overflow:hidden;box-shadow:3px 3px 0 rgba(0,0,0,0.04);max-width:540px;margin-left:auto;margin-right:auto;}
+  .freebox.revealed{border-color:var(--crayon-purple);}
+  .freebox-lid{padding:14px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:background 0.3s;}
+  .freebox-lid:hover{background:#FAF6ED;}
+  .freebox-lid h3{font-size:1.2rem;margin:0;display:flex;align-items:center;gap:8px;}
+  .freebox-contents{max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 16px;}
+  .freebox.open .freebox-contents{max-height:400px;padding:12px 16px 16px;}
+  .freebox-desc{font-family:'Indie Flower',cursive;font-size:0.9rem;color:#777;margin-bottom:10px;line-height:1.4;}
+  .freebox-grid{display:flex;flex-wrap:wrap;gap:7px;}
+
+  #disruption-section{background:#F5EFE0;padding:80px 20px;min-height:auto;}
+  .disruption-intro{font-family:'Architects Daughter',cursive;font-size:1.1rem;text-align:center;color:var(--pencil-grey);margin-bottom:30px;line-height:1.6;}
+  .event-cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;}
+  .event-card{width:210px;padding:18px;background:white;border:2px solid #ddd;border-radius:8px;cursor:pointer;transition:all 0.3s;text-align:center;}
+  .event-card:hover{transform:translateY(-3px);box-shadow:3px 6px 12px rgba(0,0,0,0.08);}
+  .event-card.selected{border-color:var(--crayon-red);background:#FFF5F5;}
+  .event-card .event-icon{font-size:2rem;margin-bottom:6px;}
+  .event-card h3{font-size:1.1rem;margin-bottom:4px;}
+  .event-card p{font-family:'Indie Flower',cursive;font-size:0.85rem;color:#777;}
+  .event-result{max-width:650px;margin:0 auto;opacity:0;transform:translateY(20px);transition:all 0.6s;}
+  .event-result.visible{opacity:1;transform:translateY(0);}
+  .event-result-card{background:white;border-left:5px solid var(--crayon-red);border-radius:0 8px 8px 0;padding:24px 28px;box-shadow:2px 3px 8px rgba(0,0,0,0.06);margin-bottom:20px;}
+  .event-result-card h3{color:var(--crayon-red);font-size:1.3rem;margin-bottom:10px;}
+  .event-result-card p{font-size:0.98rem;line-height:1.7;color:var(--pencil-grey);margin-bottom:8px;}
+  .lost-items{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .lost-item{font-family:'Patrick Hand',cursive;font-size:0.8rem;padding:3px 10px;border-radius:3px;background:#FDD;color:#7A1010;text-decoration:line-through;opacity:0.7;}
+  .stigma-item{font-family:'Patrick Hand',cursive;font-size:0.8rem;padding:3px 10px;border-radius:3px;background:#FEF0CD;color:#6B3500;border:1px dashed #D4A017;}
+  .try-another-btn{display:block;margin:20px auto 0;font-family:'Caveat',cursive;font-size:1.15rem;padding:10px 28px;background:var(--crayon-blue);color:white;border:none;border-radius:6px;cursor:pointer;box-shadow:2px 3px 0px #1D4A7A;transition:all 0.3s;}
+  .try-another-btn:hover{transform:translateY(-2px);box-shadow:2px 5px 0px #1D4A7A;}
+
+  #strip-section{background:#F0EBE0;}
+  .strip-prompt{font-family:'Caveat',cursive;font-size:clamp(1.8rem,4vw,2.8rem);text-align:center;color:var(--crayon-red);margin-bottom:20px;line-height:1.3;}
+  .strip-subtext{font-family:'Architects Daughter',cursive;font-size:1.1rem;text-align:center;color:#777;margin-bottom:30px;}
+  .bell-btn{display:block;margin:0 auto 30px;font-family:'Caveat',cursive;font-size:1.5rem;padding:14px 40px;background:var(--crayon-red);color:white;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s;box-shadow:3px 4px 0px #8C2218;}
+  .bell-btn:hover{transform:translateY(-2px);box-shadow:3px 6px 0px #8C2218;}
+  .bell-btn:active{transform:translateY(2px);box-shadow:1px 1px 0px #8C2218;}
+  .bell-btn:disabled{background:#bbb;box-shadow:2px 2px 0px #888;cursor:not-allowed;}
+  .stripped-figure{text-align:center;margin-top:20px;opacity:0;transition:opacity 1s;}
+  .stripped-figure.visible{opacity:1;}
+  .fallen-labels{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:500px;margin:20px auto;opacity:0;transition:opacity 1.5s ease 0.8s;}
+  .fallen-labels.visible{opacity:1;}
+  .fallen-label{font-family:'Patrick Hand',cursive;font-size:0.75rem;padding:3px 8px;background:#e8e0d0;color:#999;border-radius:3px;transform:rotate(var(--rot,3deg));text-decoration:line-through;opacity:0.5;}
+  .post-strip-q{font-family:'Caveat',cursive;font-size:clamp(1.3rem,3vw,2rem);text-align:center;color:var(--pencil-grey);margin-top:40px;opacity:0;transition:opacity 1.5s ease 1.8s;line-height:1.4;}
+  .post-strip-q.visible{opacity:1;}
+
+  .comparison-section{margin-top:50px;opacity:0;transition:opacity 1.5s ease 2.8s;}
+  .comparison-section.visible{opacity:1;}
+  .comparison-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;max-width:780px;margin:20px auto 0;}
+  .comp-student{background:white;border-radius:8px;padding:18px 14px;text-align:center;border:2px solid #E8DCC8;position:relative;}
+  .comp-student svg{width:80px;height:160px;display:block;margin:0 auto 8px;}
+  .comp-student h4{font-family:'Caveat',cursive;font-size:1.1rem;margin-bottom:4px;}
+  .comp-student .comp-desc{font-family:'Indie Flower',cursive;font-size:0.8rem;color:#777;line-height:1.4;margin-bottom:6px;}
+  .comp-items{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;}
+  .comp-item{font-family:'Patrick Hand',cursive;font-size:0.68rem;padding:2px 7px;border-radius:3px;}
+  .comp-item.has{background:#B3E8C7;color:#0A3318;}
+  .comp-item.lacks{background:#FDD;color:#7A1010;text-decoration:line-through;opacity:0.6;}
+  .comp-barrier{font-family:'Indie Flower',cursive;font-size:0.75rem;color:#7A1010;margin-top:6px;padding:4px 8px;background:#FEF2F2;border-radius:4px;}
+  .comp-access{font-family:'Indie Flower',cursive;font-size:0.75rem;color:#0A3318;margin-top:4px;padding:4px 8px;background:#F0FDF4;border-radius:4px;}
+
+  #question-section{background:#2C2C2C;color:white;text-align:center;}
+  .question-header{font-family:'Architects Daughter',cursive;font-size:clamp(1rem,2vw,1.2rem);color:#999;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+  .big-question{font-family:'Caveat',cursive;font-size:clamp(1.8rem,5vw,3.2rem);color:white;line-height:1.3;margin-bottom:20px;max-width:700px;}
+  .sub-question{font-family:'Architects Daughter',cursive;font-size:clamp(1rem,2.5vw,1.4rem);color:var(--crayon-yellow);max-width:600px;line-height:1.5;margin:0 auto;}
+
+  #zoomout-section{background:#F5F0E8;padding:80px 20px;min-height:auto;}
+  .alt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;max-width:850px;margin:30px auto;}
+  .alt-card{background:white;border-radius:8px;padding:22px;border:2px solid #E8DCC8;transition:all 0.3s;}
+  .alt-card:hover{transform:translateY(-3px);box-shadow:3px 6px 12px rgba(0,0,0,0.08);}
+  .alt-card .alt-icon{font-size:1.8rem;margin-bottom:6px;}
+  .alt-card h3{font-size:1.2rem;margin-bottom:6px;}
+  .alt-items{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0;}
+  .alt-item{font-family:'Patrick Hand',cursive;font-size:0.78rem;padding:3px 9px;border-radius:3px;}
+  .alt-card .promise{font-family:'Indie Flower',cursive;font-size:0.85rem;color:#0A3318;margin-top:10px;padding:7px 10px;background:#F0FDF4;border-left:3px solid var(--crayon-green);border-radius:0 4px 4px 0;line-height:1.3;}
+  .alt-card .barrier{font-family:'Indie Flower',cursive;font-size:0.85rem;color:#7A1010;margin-top:6px;padding:7px 10px;background:#FEF2F2;border-left:3px solid var(--crayon-red);border-radius:0 4px 4px 0;line-height:1.3;}
+
+  .data-section{background:#F0EBE0;padding:80px 20px;min-height:auto;}
+  .feedback-card{max-width:600px;margin:0 auto 18px;background:white;padding:22px 28px;border-left:5px solid var(--crayon-blue);border-radius:0 6px 6px 0;box-shadow:2px 3px 8px rgba(0,0,0,0.06);font-family:'Gaegu',cursive;font-size:1.05rem;color:var(--pencil-grey);line-height:1.6;transform:rotate(var(--rot,0deg));transition:transform 0.3s;}
+  .feedback-card:hover{transform:rotate(0deg) scale(1.01);}
+  .feedback-card .attribution{font-size:0.85rem;color:#999;margin-top:6px;font-family:'Patrick Hand',cursive;}
+
+  .case-study-card{max-width:680px;margin:40px auto;background:#FFF3CD;border:2px solid #D4A017;border-radius:8px;padding:28px 32px;position:relative;}
+  .case-study-card::before{content:'📰';position:absolute;top:-15px;left:20px;font-size:1.5rem;background:#FFF3CD;padding:0 8px;}
+  .case-study-card h3{font-size:1.3rem;color:#6B3500;margin-bottom:10px;}
+  .case-study-card p{font-size:0.98rem;line-height:1.7;color:#4A2900;}
+
+  .disciplines-container{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding:20px 0;}
+  .discipline-row{display:flex;align-items:stretch;gap:14px;opacity:0;transform:translateY(20px);transition:all 0.6s;}
+  .discipline-row.visible{opacity:1;transform:translateY(0);}
+  .discipline-icon{width:50px;min-width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;align-self:flex-start;margin-top:4px;}
+  .discipline-text h3{font-size:1.15rem;margin-bottom:2px;}
+  .discipline-text p{font-size:0.92rem;line-height:1.55;color:#555;}
+
+  .debate-card{max-width:720px;margin:0 auto 30px;display:flex;gap:0;border-radius:8px;overflow:hidden;box-shadow:3px 4px 0px rgba(0,0,0,0.05);}
+  .debate-side{flex:1;padding:22px 20px;min-width:0;}
+  .debate-side.left{background:#E8F0FA;border-left:4px solid var(--crayon-blue);}
+  .debate-side.right{background:#FAEAE8;border-right:4px solid var(--crayon-red);}
+  .debate-side h3{font-size:1.15rem;margin-bottom:8px;}
+  .debate-side p{font-size:0.92rem;line-height:1.6;color:#444;}
+  .debate-vs{display:flex;align-items:center;justify-content:center;padding:0 6px;background:#F5F0E8;font-family:'Caveat',cursive;font-size:1.3rem;color:#aaa;min-width:40px;}
+
+  #closing-section{background:var(--paper-cream);text-align:center;}
+  .closing-message{font-family:'Caveat',cursive;font-size:clamp(1.5rem,4vw,2.5rem);color:var(--pencil-grey);max-width:600px;line-height:1.4;margin-bottom:30px;}
+  .closing-small{font-family:'Patrick Hand',cursive;font-size:1rem;color:#999;max-width:500px;line-height:1.6;}
+
+  .nav-dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:7px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:#ccc;cursor:pointer;transition:all 0.3s;border:none;padding:0;}
+  .nav-dot.active{background:var(--crayon-red);transform:scale(1.5);}
+  .nav-dot:hover{background:var(--crayon-blue);}
+
+  @media(max-width:700px){
+    .nav-dots{display:none;}
+    .day-layout{flex-direction:column;align-items:center;}
+    .notebook-card{padding:25px 20px 25px 50px;}
+    .debate-card{flex-direction:column;}
+    .debate-vs{min-width:auto;padding:6px 0;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<section id="title-section">
+  <div class="section-inner">
+    <div class="doodle-star" style="top:15%;left:10%;">✦</div>
+    <div class="doodle-star" style="top:20%;right:15%;animation-delay:1s;">✧</div>
+    <div class="doodle-star" style="top:60%;left:20%;animation-delay:0.5s;">✦</div>
+    <p class="subtitle">An Interactive Exploration</p>
+    <h1 class="main-title">Who Decides<br>Who I Am?</h1>
+    <p class="author-note">Rachel Walsh · IL304 · Student Designed Assessment</p>
+  </div>
+  <div class="scroll-hint">scroll down to begin <span>↓</span></div>
+</section>
+
+<section id="context-section" style="background:var(--paper-cream);min-height:auto;padding:80px 20px;">
+  <div class="section-inner">
+    <div class="dictionary-card fade-in">
+      <div class="dict-headword">la·bel</div>
+      <div class="dict-phonetic">/ˈleɪb(ə)l/ &nbsp; <span class="dict-pos">noun</span></div>
+      <p class="dict-definition"><span class="dict-sense-num">2.</span> <span class="dict-label">(disapproving)</span> A word or phrase that is used to describe somebody or something in a way that seems too general, unfair, or not correct.</p>
+      <div class="dict-source">Oxford Advanced Learner's Dictionary (2025)</div>
+    </div>
+
+    <div class="notebook-card fade-in">
+      <h2>School Tells Us Who We Are</h2>
+      <p>It hands us identities: <em>the sporty one</em>, <em>the troublemaker</em>, <em>the academic</em>, and we wear them so long they start to feel like skin.</p>
+      <p>Becker (1963) called this a <em>'master status'</em>: a single identity marker that overrides everything else about who the child is. The troublemaker is no longer a child who sometimes disrupts; they become the disruption.</p>
+      <p>Rosenthal and Jacobson's Pygmalion experiment (1968) demonstrated how this works in practice: teachers who were told certain students would 'intellectually bloom' invested more in those children, who subsequently performed better. The label preceded the reality, then created it.</p>
+      <div class="rt-callout">
+        <span class="rt-icon">📋</span> <strong>From the RoundTable:</strong> <em>"'Troublemaker' is a very one-note label; I was reduced to one negative quality with no space to be better."</em> — Participant.
+        <div class="rt-note">More voices from the RoundTable appear later in this piece.</div>
+      </div>
+    </div>
+
+    <div class="notebook-card fade-in">
+      <h2 style="color:var(--crayon-purple);">Goffman: The Stage and the Mask</h2>
+      <p>Erving Goffman's dramaturgical theory (1956) frames social life as performance. We present a <em>'front stage'</em> self that fits the audience's expectations, and keep a <em>'back stage'</em> self hidden. In school, the front stage is permanent: the audience never leaves. When Goffman writes about <em>stigma</em> (1963), he describes identities that become 'spoiled', permanently marked by a single characteristic.</p>
+    </div>
+
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-purple);">
+      <h2 style="color:var(--crayon-purple);">Uniform as Identity</h2>
+      <p>Think of it as a school uniform: the invisible outfit of expectations and categories that school dresses every child in.</p>
+      <p><strong>Below, you will live through a school day, choosing an item to wear at every point in the timetable, but some may not be yours to choose. Then you will discover what has been written about you without your knowledge. Then you will see what happens when the system changes, and when school ends entirely.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="erikson-section" style="background:#F5F0E8;padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-orange);">
+      <h2 style="color:var(--crayon-orange);">Erikson: Identity vs. Role Confusion</h2>
+      <p>Erikson (1968) calls adolescence the crisis of <em>identity versus role confusion</em>. The task is not to receive an identity but to construct one: to experiment, try on different selves, and gradually commit to a coherent sense of who you are.</p>
+      <p>But if the institution has already decided, the experiment never happens. The child labelled 'sporty' at age seven has had their Eriksonian crisis pre-empted. They have not chosen an identity; one has been assigned. And when that assigned identity is removed, as it is every summer, the young person is not returning to a self they built. They are returning to an empty outline. Erikson would call this role confusion: a persistent sense of not knowing who you are, what you value, or where you belong.</p>
+    </div>
+  </div>
+</section>
+
+<section id="schoolday-section">
+  <div class="section-inner">
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:2rem;text-align:center;margin-bottom:4px;">A School Day</h2>
+    <p class="fade-in" style="font-family:'Architects Daughter',cursive;font-size:1rem;text-align:center;color:#777;margin-bottom:6px;">Click to choose, and watch the mannequin adorn their new uniform.</p>
+    <div class="meter-container" id="meterContainer">
+      <div class="meter-label"><span>Identity Coherence</span><span id="meterPercent">0%</span></div>
+      <div class="meter-bar-bg"><div class="meter-bar-fill" id="meterFill"></div></div>
+      <div class="meter-status" id="meterStatus"></div>
+    </div>
+    <div class="day-layout">
+      <div class="mannequin-area">
+        <div class="mannequin-wrap">
+          <svg class="mannequin-svg" id="mannequinSvg" viewBox="0 0 240 480" xmlns="http://www.w3.org/2000/svg">
+            <g id="bodyGroup">
+              <circle cx="120" cy="70" r="38" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/>
+              <path d="M85 108 Q120 102 155 108 L160 260 Q120 265 80 260 Z" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/>
+              <path d="M85 115 Q50 165 42 230" fill="none" stroke="#C8B8A0" stroke-width="13" stroke-linecap="round"/>
+              <path d="M155 115 Q190 165 198 230" fill="none" stroke="#C8B8A0" stroke-width="13" stroke-linecap="round"/>
+              <path d="M95 260 Q90 350 85 440" fill="none" stroke="#C8B8A0" stroke-width="15" stroke-linecap="round"/>
+              <path d="M145 260 Q150 350 155 440" fill="none" stroke="#C8B8A0" stroke-width="15" stroke-linecap="round"/>
+              <circle cx="108" cy="64" r="3.5" fill="#A89880"/><circle cx="132" cy="64" r="3.5" fill="#A89880"/>
+              <path d="M112 80 Q120 87 128 80" fill="none" stroke="#A89880" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+            <g id="clothesGroup"></g>
+          </svg>
+        </div>
+        <div class="worn-count" id="wornCount"></div>
+      </div>
+      <div class="day-panel" id="dayPanel"></div>
+    </div>
+    <div id="staffRoomArea" style="display:none;margin-top:30px;"></div>
+  </div>
+</section>
+
+<section id="disruption-section">
+  <div class="section-inner">
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:2.1rem;text-align:center;margin-bottom:8px;color:var(--crayon-red);">Something Changes</h2>
+    <p class="disruption-intro fade-in">School is not static. Harari (2018) argues that the skills easiest to teach and test are also the easiest to automate, and when economic priorities shift, schools shift with them. The students absorb the consequences.<br><br><strong>Choose an event. See what it does to the uniform.</strong></p>
+    <div class="event-cards" id="eventCards"></div>
+    <div class="event-result" id="eventResult"></div>
+  </div>
+</section>
+
+<section id="strip-section">
+  <div class="section-inner" style="text-align:center;">
+    <p class="strip-prompt fade-in">"It's the last day of term.<br>School is over."</p>
+    <p class="strip-subtext fade-in">Take off everything that only exists because school exists.</p>
+    <button class="bell-btn" id="bellBtn" disabled>🔔 Ring the Bell: School's Out</button>
+    <div class="stripped-figure" id="strippedFigure">
+      <svg style="width:160px;height:330px;" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="55" r="35" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/>
+        <path d="M70 90 Q100 85 130 90 L135 220 Q100 225 65 220 Z" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/>
+        <path d="M70 95 Q40 140 35 190" fill="none" stroke="#C8B8A0" stroke-width="12" stroke-linecap="round"/>
+        <path d="M130 95 Q160 140 165 190" fill="none" stroke="#C8B8A0" stroke-width="12" stroke-linecap="round"/>
+        <path d="M80 220 Q75 300 70 370" fill="none" stroke="#C8B8A0" stroke-width="14" stroke-linecap="round"/>
+        <path d="M120 220 Q125 300 130 370" fill="none" stroke="#C8B8A0" stroke-width="14" stroke-linecap="round"/>
+        <circle cx="88" cy="50" r="3" fill="#A89880"/><circle cx="112" cy="50" r="3" fill="#A89880"/>
+        <path d="M92 66 Q100 64 108 66" fill="none" stroke="#A89880" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="fallen-labels" id="fallenLabels"></div>
+    </div>
+    <p class="post-strip-q" id="postStripQ">Now, who are you? Who decides?<br><span style="font-size:0.7em;color:#999;">No blazer, no tie, no trousers, no shoes. What do you wear when no one tells you what to put on?</span></p>
+    <div class="comparison-section" id="comparisonSection">
+      <h2 style="font-family:'Caveat',cursive;font-size:1.6rem;color:var(--pencil-grey);margin-bottom:6px;">But Not Everyone Starts the Summer the Same Way</h2>
+      <p style="font-family:'Indie Flower',cursive;font-size:0.95rem;color:#777;margin-bottom:16px;">Four students. Same school. Same bell. Very different summers.</p>
+      <div class="comparison-grid" id="comparisonGrid"></div>
+    </div>
+  </div>
+</section>
+
+<section id="learningloss-section" style="background:#F5EFE0;padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in">
+      <h2 style="color:var(--crayon-red);">Learning Loss and the Long Holiday</h2>
+      <p>Cooper et al. (1996) found that students from lower socioeconomic backgrounds lost over two months of reading progress during summer, while more affluent peers maintained or gained. But the regression is not only academic. When school stops, so do most extracurricular activities and clubs. For students whose identity was constructed within these institutional spaces, the summer does not just pause their learning, it pauses their <em>being</em>.</p>
+    </div>
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-green);">
+      <h2 style="color:var(--crayon-green);">The Equity Dimension</h2>
+      <p>Alternatives exist to fill this gap: summer camps, forest schools, holiday clubs, sports academies. But they are expensive (BBC News (2024) reports an average of £1,076 per child for the six-week break), require regular drop-off and collection, and are concentrated in areas with the infrastructure to sustain them.</p>
+    </div>
+  </div>
+</section>
+
+<section id="question-section">
+  <div class="section-inner">
+    <p class="question-header fade-in">Critical Question and Subsidiary Question</p>
+    <p class="big-question fade-in">"If school constructs identity, does it have a responsibility to deconstruct it safely?"</p>
+    <p class="sub-question fade-in">"Who has access to a meaningful identity outside of school — and who doesn't?"</p>
+  </div>
+</section>
+
+<section id="contract-section" style="background:var(--paper-cream);padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in">
+      <h2>The Social Contract</h2>
+      <p>Rousseau's social contract poses a question that runs in the opposite direction to the one schools typically ask. Not what does the student owe the institution? But, what does the institution owe the student?</p>
+      <p>If school constructs an identity framework conducive to a deep sense of belonging, by building a stage, assigning roles, rewarding certain performances and punishing others, does the contract include an obligation to support the student when the stage is dismantled?</p>
+      <p>Bowles and Gintis' correspondence theory (1976) argues that schooling mirrors the workplace: hierarchy, punctuality, compliance, differentiated reward. But workplaces provide continuity and are chosen by their employees. Schools close for six weeks and expect students to reconstruct their identity from scratch upon return, and again, the students who suffer most are those with the fewest alternative structures to hold them together.</p>
+    </div>
+    <div class="case-study-card fade-in">
+      <h3>Case Study: Australia's Social Media Ban</h3>
+      <p>In November 2024, the Australian Parliament passed the Online Safety Amendment (Social Media Minimum Age) Act 2024, banning under-16s from holding accounts on major social media platforms including Instagram, TikTok, Snapchat, and YouTube. The ban came into force on 10 December 2025, just before the Australian summer holidays. It was widely praised by parents and policymakers. But consider it from the perspective of a student whose school label was 'the outsider' or 'the quiet one': a student for whom social media may have been the only arena where they could construct an identity of their choosing, outside the gaze of teachers and the hierarchy of the playground.</p>
+      <p>For these students, the ban removed the last identity-constructing space during the very period when school's framework disappears. The intention was protection. The effect, for some, was isolation.</p>
+    </div>
+    <div class="case-study-card fade-in">
+      <h3>Case Study: Akala and the Label That Preceded the Person</h3>
+      <p>In his memoir <em>Natives: Race and Class in the Ruins of Empire</em> (2018), the rapper and activist Akala describes entering the British school system as a boy who loved reading and wanted to be an astronaut. Despite this, he was placed in a group intended for children who did not speak English, while he was at home reading Tolkien. When his mother discovered the placement, she immediately challenged the school. The label had been assigned not on evidence but on assumption, shaped by the colour of his skin and the postcode he came from. A Bristol University study cited by Akala found that when teachers knew a student was Black, they assessed their work at nearly twice as low a standard compared with the same work graded blind.</p>
+      <p>What makes Akala's account particularly relevant to this SDA is what happened outside of school. His identity was rebuilt not by the institution that had mislabelled him, but by the Pan-African Saturday School, a community-led initiative that taught Black British children their history, built their confidence, and gave them the tools to succeed within a system that was not designed for them.</p>
+    </div>
+  </div>
+</section>
+
+<section id="debate-section" style="background:#F5F0E8;padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:2rem;text-align:center;margin-bottom:8px;">The Oldest Argument in Education</h2>
+    <p class="fade-in" style="font-family:'Architects Daughter',cursive;font-size:1rem;text-align:center;color:#777;margin-bottom:24px;max-width:650px;margin-left:auto;margin-right:auto;line-height:1.55;">Before we can reinvent education, we have to understand the two philosophies that have been arguing over it for more than a century.</p>
+    <div class="debate-card fade-in">
+      <div class="debate-side left">
+        <h3 style="color:var(--crayon-blue);">Dewey's Progressive Model</h3>
+        <p>Education as 'the fundamental method of social progress and reform' (2009). The child's interests and development come first. Learners should be active, not passive.</p>
+        <p style="margin-top:10px;font-size:0.88rem;color:var(--crayon-blue);">In Dewey's school, the uniform would be self-designed.</p>
+      </div>
+      <div class="debate-vs">vs</div>
+      <div class="debate-side right">
+        <h3 style="color:var(--crayon-red);">Christodoulou's Traditional Model</h3>
+        <p>Educational inequality is established before school starts; the only way to close the gap is disciplined teaching of foundational knowledge (2014). Back to basics.</p>
+        <p style="margin-top:10px;font-size:0.88rem;color:var(--crayon-red);">In Christodoulou's school, the uniform would be standard-issue.</p>
+      </div>
+    </div>
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-orange);">
+      <h2 style="color:var(--crayon-orange);">Where This SDA Sits</h2>
+      <p>The labelling problem sits at the intersection of both models. In a traditional system, labels are imposed: predicted grades, sets, excluded. In a progressive model, labels may be softer, but they still form. The tension became explicitly political after Callaghan's 1976 Ruskin speech, which paved the way for the National Curriculum and Ofsted. The labels schools apply to children are downstream consequences of political decisions about what education is <em>for</em>. Furedi (2011) adds that if teachers lack the relational continuity to even <em>know</em> which labels a student carries, then the labels are formed by the system, not by anyone who actually knows the child.</p>
+    </div>
+  </div>
+</section>
+
+<section id="zoomout-section">
+  <div class="section-inner">
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:2.1rem;text-align:center;margin-bottom:8px;">Zoom Out: Other Wardrobes Exist</h2>
+    <p class="fade-in" style="font-family:'Architects Daughter',cursive;font-size:1rem;text-align:center;color:#777;margin-bottom:10px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.55;">Progressive and alternative education models dress their students differently, some discarding the uniform altogether. But access to these wardrobes is not equally distributed, and the standardised British education system remains what most children wear.</p>
+    <div class="alt-grid" id="altGrid"></div>
+    <div class="notebook-card fade-in" style="margin-top:40px;background-image:none;background:white;">
+      <h2 style="color:var(--crayon-red);">The Utopia/Dystopia Tension</h2>
+      <p>Each alternative can be framed as utopian: child-led, holistic, identity-affirming, developmentally respectful. But each carries its own dystopian shadow, whether it be cost, geography, cultural capital, or the assumption that all families can opt out of the mainstream. The Montessori parent who celebrates the absence of grades is exercising a privilege that the parent relying on Free School Meals cannot access. The home-educating family who builds identity around community and self-direction assumes a carer who is not working two jobs.</p>
+      <p>Dewey wrote that 'every school and class must be a genuine society where the behaviours wanted tomorrow are practised in meaningful context today'. But what society is being practised when the uniform is imposed, the labels are assigned, and the bell rings to send every child back to a world that may or may not have space for who they are becoming?</p>
+    </div>
+  </div>
+</section>
+
+<section class="data-section" id="evidence-section">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="background-image:none;background:white;">
+      <h2 style="color:var(--crayon-green);">Voices from the RoundTable</h2>
+      <p>During my RoundTable session, fourteen participants wore school-identity labels and played a parachute switching game that sorted them by assigned, then had those labels removed. Their written feedback forms the empirical backbone of this SDA.</p>
+    </div>
+
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:1.5rem;text-align:center;color:var(--crayon-red);margin:20px 0 14px;">"The label I was given felt..., because"</h2>
+    <div class="feedback-card fade-in" style="--rot:0.3deg;border-left-color:var(--crayon-purple);">"'Teacher's pet' is a label that punishes someone for being engaged in lessons."<div class="attribution">— Participant, patronising</div></div>
+    <div class="feedback-card fade-in" style="--rot:0.4deg;border-left-color:var(--crayon-blue);">"It ignored my entire personality and just focused on my lack of existing relationships and isolation."<div class="attribution">— Participant, oversimplified</div></div>
+
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:1.5rem;text-align:center;color:var(--crayon-blue);margin:28px 0 14px;">"When the parachute dropped..."</h2>
+    <div class="feedback-card fade-in" style="--rot:-0.6deg;border-left-color:var(--crayon-orange);">"I didn't even know where to start to find common ground or find kindness."<div class="attribution">— Participant</div></div>
+    <div class="feedback-card fade-in" style="--rot:0.5deg;border-left-color:var(--crayon-purple);">"I spoke to the quiet one, the almost antithesis of troublemaker; it was hard to know where to begin."<div class="attribution">— Participant</div></div>
+
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:1.5rem;text-align:center;color:var(--crayon-green);margin:28px 0 14px;">"Access to identity outside school depends on..."</h2>
+    <div class="feedback-card fade-in" style="--rot:-0.2deg;border-left-color:var(--crayon-green);">"Activities and extracurriculars; the range of those you have access to."<div class="attribution">— Participant</div></div>
+    <div class="feedback-card fade-in" style="--rot:0.4deg;border-left-color:var(--crayon-yellow);">"Being confident in who you are in a way that is not based on grades, friends, or even family; for me, identity comes from faith."<div class="attribution">— Participant</div></div>
+
+    <div class="notebook-card fade-in" style="margin-top:28px;background-image:none;background:white;">
+      <h2 style="color:var(--crayon-purple);">What This Tells Us</h2>
+      <p>Labelling is consistently experienced as an oversimplification, confirming Becker's thesis that institutional labels flatten complex individuals into manageable categories. Every participant reported that prolonged labelling would have influenced their behaviour, with several embodying the assigned identity even within the activity's short duration. Twelve of fourteen said their label would have felt less restrictive if they had been consulted in its creation, an instinctive articulation of Rousseau's social contract. When asked what access to identity outside school depends on, the answers pointed unanimously to community, but access to community is not equally distributed. The equity gap is not just in attainment. It is in who gets to <em>be</em> someone when the institution withdraws.</p>
+    </div>
+  </div>
+</section>
+
+<section id="disciplines-section" style="background:#F5F0E8;padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <h2 class="fade-in" style="font-family:'Caveat',cursive;font-size:2rem;text-align:center;margin-bottom:8px;">Transdisciplinary Triumphs</h2>
+    <p class="fade-in" style="font-family:'Architects Daughter',cursive;text-align:center;color:#777;max-width:650px;margin:0 auto 28px;line-height:1.6;font-size:0.95rem;">In the same way that a person cannot be reduced to a single label, this SDA cannot be reduced to a single field.</p>
+    <div class="disciplines-container">
+      <div class="discipline-row fade-in"><div class="discipline-icon" style="background:#BDD5F5;">🏛</div><div class="discipline-text"><h3 style="color:var(--crayon-blue);">Sociology</h3><p>Becker's labelling theory, Goffman's stigma and dramaturgical theory, and Bowles and Gintis' correspondence principle; collectively explaining how institutions categorise individuals, reproduce inequality, and construct identities that serve the system's needs.</p></div></div>
+      <div class="discipline-row fade-in"><div class="discipline-icon" style="background:#D4B8F0;">🧠</div><div class="discipline-text"><h3 style="color:var(--crayon-purple);">Psychology</h3><p>Erikson's identity formation crisis, and Rosenthal and Jacobson's Pygmalion effect explains why the stripped-back silhouette feels so exposing, how teacher expectations become internal realities, and what happens developmentally when identity construction is pre-empted by institutional categorisation.</p></div></div>
+      <div class="discipline-row fade-in"><div class="discipline-icon" style="background:#B3E8C7;">📚</div><div class="discipline-text"><h3 style="color:var(--crayon-green);">Pedagogy</h3><p>Cooper et al.'s research on learning loss during holidays, the Teach First retention problem, Dewey's pedagogic creed, and Christodoulou's defence of traditional education emphasises how educational design creates, compounds, and occasionally addresses the identity crises it produces.</p></div></div>
+      <div class="discipline-row fade-in"><div class="discipline-icon" style="background:#F5E088;">⚖</div><div class="discipline-text"><h3 style="color:#6B3500;">Political Philosophy</h3><p>Rousseau's social contract, and Furedi's critique of declining adult responsibility highlights the obligation that runs from institution to student, and what happens when that obligation is not honoured.</p></div></div>
+      <div class="discipline-row fade-in"><div class="discipline-icon" style="background:#F5C6DD;">🎭</div><div class="discipline-text"><h3 style="color:var(--crayon-pink);">Performance & Material Culture</h3><p>The interactive form of this SDA insists that identity is not only theorised but <em>felt</em>. You cannot fully understand labelling by reading about it. You must wear it, choose it, have it imposed, and then have it stripped away. The form <em>is</em> the argument.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="neuro-section" style="background:var(--paper-cream);padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-pink);">
+      <h2 style="color:var(--crayon-pink);">A Note on Neurodiversity and Masking</h2>
+      <p>The uniform metaphor has particular implications for neurodivergent students, and the implications are gendered. Research shows that neurodivergent girls are significantly better at 'masking': performing neurotypicality so convincingly that diagnosis is delayed or prevented entirely (McKinney et al., 2024). In school, masking is rewarded. The SENCO review in the Staff Room File that reads 'seems fine, very compliant, no concerns' is a review of a performance, not a person. The mask <em>is</em> a uniform item, constructed in response to institutional expectations at enormous cognitive cost.</p>
+      <p>When school ends, the mask has no audience. Where other students lose a role they were assigned, neurodivergent students who mask may lose the <em>self they built</em>. Diagnosis is itself unevenly distributed, shaped by gender, race, and socioeconomic status. A student who masks successfully will simply be labelled 'no concerns', and sent into the summer with a mask and an insufficient support system.</p>
+    </div>
+  </div>
+</section>
+
+<section id="reflection-section" style="background:#F5F0E8;padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="margin-top:30px;background-image:none;background:white;border-left:4px solid var(--crayon-red);">
+      <h2 style="color:var(--crayon-red);">What I Got Wrong (that still doesn't mean I should be labelled a failure):</h2>
+      <p>I initially framed labelling as something done <em>to</em> students by <em>teachers</em>. However, with further reading it is clear to see that students label each other, label themselves, and sometimes <em>choose</em> labels as armour. And whilst we may like to think that greater autonomy in this process would lead to greater individual satisfaction; in fact two RoundTable respondents noted that even consultation about their assigned label wouldn’t have helped; some labels are inherently reductive regardless of consent.</p>
+      <p>I also assumed the summer holiday was straightforwardly harmful, but maybe unsurprisingly it is more complicated than that. For some students, particularly those in oppressive or unsafe school environments, the summer serves as a liberation. My framework centres students who <em>lose</em> identity when school ends, but there are students who <em>find</em> themselves precisely because the institution's gaze lifts. A fuller version of this SDA would need to hold both truths simultaneously.</p>
+      <p>The interactive format of this SDA carries its own risk of oversimplification. By turning identity into clickable items on a mannequin, I am doing a version of what I am critiquing by reducing complex, lived experience into categories. I am aware of this irony, and I have tried to let the format make the point rather than disguise it. The identity meter that increments by +18 for each choice is another example - the number is arbitrary, but the feeling of watching it rise and fall is not.</p>
+      <p>My lead research question asks whether school has a responsibility to deconstruct identity safely, but this SDA does not fully explore what safe deconstruction would look like in practice. I critique the removal of identity but do not propose a model for how institutions might manage the transition. This gap became apparent only during the process of writing the abstract. A more complete version would need to move beyond diagnosis and towards reasoned proposal.</p>
+      <p>This SDA is also rooted almost entirely in British and Eurocentric educational frameworks. A more comprehensive version would need to interrogate whether the identity vacuum I describe is universal or a particular feature of individualist Western schooling systems.</p>
+    </div>
+  </div>
+</section>
+
+<section id="reinvention-section" style="background:var(--paper-cream);padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-green);background-image:none;background:white;">
+      <h2 style="color:var(--crayon-green);">So What Would a Reinvented System Actually Look Like?</h2>
+      <p>A system that takes identity seriously would not just teach children; it would prepare them for the moments when teaching stops. It would build transition into its design: identity audits at the end of each year that ask students who they are becoming, not just what grade they achieved. Funded partnerships with community organisations to bridge the holiday gap. Curriculum space for students to practise building identity independently of the institution, so that when the institution withdraws, the student is not left unmoored.</p>
+      <p>But no system can prevent every fracture. Teachers leave. Clubs close. Curricula shift. And that is not a failure, but a fact of life. The question is whether we treat those fractures as problems to be smoothed over, or as the very places where identity can be built. When the uniform loosens and the labels falter, a young person gets a rare gift: the chance to decide who they are without someone else deciding first. A reinvented system would not shield students from that challenge. It would prepare them to meet it.</p>
+      <p>A child is not only a learner. They are a sibling, a neighbour, a friend, a person with interests that have nothing to do with school. A system that constructs identity only through academic and institutional categories has not educated the whole person.</p>
+    </div>
+  </div>
+</section>
+
+<section id="critique-reinvention-section" style="background:var(--paper-cream);padding:80px 20px;min-height:auto;">
+  <div class="section-inner">
+    <div class="notebook-card fade-in" style="border-left:4px solid var(--crayon-purple);background-image:none;background:white;">
+      <h2 style="color:var(--crayon-purple);">And What Does “Reinventing Education” Even Mean?</h2>
+      <p>The phrase sounds hopeful – but for whom? “Reinvention” assumes the old is broken and the new is better. Yet every alternative model (Montessori, Forest School, home education) carries its own exclusions. Reinvention without redistribution is just rebranding.</p>
+      <p>Who gets to decide what counts as “reinvented”? A policymaker? A parent who can afford a forest school? Or the child who is simply trying to survive another year of being labelled? Before we celebrate reinvention, we have to ask: <em>reinvention for whom, and at whose expense?</em></p>
+      <div class="rt-callout" style="margin-top:16px;">
+        <span class="rt-icon">⚡</span> The module's title asks us to “reinvent education”. But this SDA has tried to show that the most urgent reinvention may not be a new curriculum, lesson plan, or widely implemented learning tool - it may be the <strong>right to build an identity that outlasts the institution</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="closing-section">
+  <div class="section-inner">
+    <p class="closing-message fade-in">"We build our identity in the cracks -<br>when we are tested, it is when we find out who we are."</p>
+    <p class="closing-small fade-in">This interactive experience is the centrepiece of my Student Designed Assessment for IL304 Reinventing Education. It is accompanied by an interdisciplinary abstract, an annotated bibliography, reference list, and reflective journal submitted separately on Tabula.</p>
+    <p class="closing-small fade-in" style="margin-top:20px;font-size:0.85rem;">Rachel Walsh · u5508211</p>
+  </div>
+</section>
+
+<script>
+const GARMENT_SHAPES = {
+  academic: { path: 'M50 108 Q60 100 85 105 Q120 98 155 105 Q180 100 190 108 L195 120 Q190 165 198 225 L188 228 L160 260 Q120 265 80 260 L52 228 L42 225 Q50 165 45 120 Z', textY: 175, label: 'Blazer' },
+  social: { path: 'M72 108 Q120 100 168 108 L165 115 Q175 130 178 148 L170 150 L162 130 L158 240 Q120 245 82 240 L78 130 L70 150 L62 148 Q65 130 75 115 Z', textY: 185, label: 'T-Shirt' },
+  extra: { path: 'M68 432 Q72 425 82 425 Q92 425 92 432 L94 448 Q94 458 84 460 L62 460 Q56 458 56 450 Q56 440 68 432 Z M148 432 Q152 425 162 425 Q172 425 172 432 L174 448 Q174 458 164 460 L142 460 Q136 458 136 450 Q136 440 148 432 Z', textY: 450, label: 'Shoes' },
+  system: { path: 'M82 255 Q120 260 158 255 L160 262 Q150 310 155 380 L158 430 Q155 438 145 438 L140 438 Q135 438 135 430 L138 380 Q132 310 125 290 Q118 310 102 380 L105 430 Q105 438 100 438 L95 438 Q85 438 82 430 L85 380 Q90 310 80 262 Z', textY: 345, label: 'Trousers' },
+  hidden: { path: 'M114 105 L126 105 L124 112 L130 115 L120 160 L110 115 L116 112 Z', textY: 137, label: 'Tie' }
+};
+const CAT_FILLS = {
+  academic: { fill:'#BDD5F5', stroke:'#6A9FD8', text:'#0F2744' },
+  social:   { fill:'#F5C6DD', stroke:'#D88BA8', text:'#5C0A2A' },
+  extra:    { fill:'#B3E8C7', stroke:'#6EBF8A', text:'#0A3318' },
+  system:   { fill:'#F5E088', stroke:'#D4B84A', text:'#4A2900' },
+  hidden:   { fill:'#D4B8F0', stroke:'#A580D0', text:'#2D0A54' }
+};
+
+const PERIODS = [
+  { id:'morning', time:'8:45 AM - Registration', icon:'🧥', title:'Morning Registration — Choose Your Blazer', desc:'The teacher takes the register and reads out predicted grades. Your academic identity is set before first period even starts.', cat:'academic', items:[{name:'Top of the Class'},{name:'Needs Improvement'},{name:'Gifted & Talented'},{name:'Below Expected'},{name:'The Bookworm'}] },
+  { id:'break', time:'10:30 AM - Break Time', icon:'👕', title:'Break Time — Choose Your T-Shirt', desc:'The playground decides. Peer groups form, hierarchies settle, and your social identity is worn for all to see.', cat:'social', items:[{name:'The Popular One'},{name:'The Quiet One'},{name:'The Loud One'},{name:'The Troublemaker'},{name:'The Invisible One'}] },
+  { id:'lunch', time:'12:15 PM - Lunchtime Clubs', icon:'👟', title:'Lunchtime — Choose Your Shoes', desc:'Where you go at lunch defines you. The pitch, the music room, the library — your feet take you to your identity.', cat:'extra', items:[{name:'The Sporty One'},{name:'The Drama Kid'},{name:'The Music One'},{name:'Chess Club'},{name:'Art Room'}] },
+  { id:'afternoon', time:'2:00 PM - Afternoon Lesson', icon:'👖', title:'Afternoon — Receive Your Trousers', desc:'The system assigns these. Streaming, pastoral records, funding categories. You do not choose your set. It chooses you.', cat:'system', items:[{name:"Teacher's Pet"},{name:'Top Set'},{name:'Bottom Set'},{name:'Pupil Premium'},{name:'SEN Register'}] }
+];
+const TACIT_LABELS = [
+  { name:'Difficult Home', note:'"Mum didn\'t come to parents\' evening again. Unsurprising given the file."', author:'Pastoral note, February half-term' },
+  { name:'The Masker', note:'"Seems fine. Very compliant. No concerns."', author:'Annual SENCO review - no further action' },
+  { name:'Expected to Fail', note:'"Based on prior attainment data this student is unlikely to achieve a grade 5."', author:'Target-setting spreadsheet, September' },
+];
+const EVENTS = [
+  { id:'teacher', icon:'👋', title:'Your Teacher Leaves', desc:'Midway through the year, the teacher who understood you moves on.',
+    result:{ title:'A Familiar Face Disappears', text:'The teacher who knew you beyond your label has left. Their replacement sees only the staffroom file. Erikson’s identity crisis becomes unsupported.', lost:['Gifted & Talented','The Bookworm'], stigmatised:['Needs Improvement','The Quiet One','Expected to Fail'], theory:'McLean and Worth (2023) found Teach First teacher retention was 69% one year after NQT, nearly 20 points below other training routes. High turnover means students lose the relational continuity that softens labelling.' }},
+  { id:'curriculum', icon:'📋', title:'The Curriculum Changes', desc:'New policy reshapes what is taught, assessed, and funded.',
+    result:{ title:'The Rules of the Game Shift', text:'A new curriculum prioritises STEM and vocational readiness. Creative subjects lose timetable space. Students whose identity was built around art, drama, or music find their uniform suddenly "wrong". Bowles and Gintis predicted this: when education serves the economy, the labels that matter change to match. The Post-16 White Paper (2025) signals exactly this direction: maintenance grants targeted at courses linked to Industrial Strategy.', lost:['The Drama Kid','The Music One','Art Room','The Dreamer'], stigmatised:['Below Expected'], theory:'Whose identity gets funded, and whose gets defunded? This is not an abstract question, but a policy decision that lands in classrooms.' }},
+  { id:'club', icon:'🚫', title:'A Lunchtime Club Closes', desc:'Budget cuts. The one space that felt like yours is gone.',
+    result:{ title:'The Third Space Vanishes', text:'The lunchtime club was the only place some students felt like themselves rather than their label, a third space between classroom and playground where the hierarchy loosened. Without it, those students are pushed back into the two arenas where their label is most rigid. For neurodivergent students who used the club as a regulation space, the loss is functional, not just social.', lost:['Chess Club','Art Room','The Coper'], stigmatised:['The Invisible One','The Masker','The Quiet One'], theory:'hooks wrote that boredom in the classroom demands pedagogical intervention. The closure of a club is the inverse - a space of engagement removed, with nothing to replace it. The students who needed it most are the ones least likely to have alternatives.' }},
+];
+const ALT_MODELS = [
+  { icon:'🌿', name:'Montessori', items:[{name:'Self-Directed Learner',c:'#B3E8C7',t:'#0A3318'},{name:'Mixed-Age Collaborator',c:'#B3E8C7',t:'#0A3318'},{name:'Intrinsic Motivator',c:'#B3E8C7',t:'#0A3318'}], promise:'No grades, no streaming, no "top set." Identity grows from curiosity, not categorisation. Dewey would approve.', barrier:'UK fees: £8,000–£18,000/year. Limited state provision. Concentrated in affluent areas. The progressive ideal — available only to those who can afford it.' },
+  { icon:'🌲', name:'Forest School', items:[{name:'Risk-Taker',c:'#A7D8B4',t:'#0A3318'},{name:'Nature Connector',c:'#A7D8B4',t:'#0A3318'},{name:'Tool User',c:'#A7D8B4',t:'#0A3318'}], promise:'Identity through embodied outdoor experience. No walls, no desks, no hierarchy of sets.', barrier:'Requires land, trained practitioners, low ratios. Usually supplementary to mainstream schooling. Transport dependent.' },
+  { icon:'🏠', name:'Home Education', items:[{name:'Self-Paced',c:'#F5E088',t:'#4A2900'},{name:'Interest-Led',c:'#F5E088',t:'#4A2900'},{name:'Family-Embedded',c:'#F5E088',t:'#4A2900'}], promise:'No institutional labels whatsoever. Identity shaped by family, community, own choices. No bell, no learning regression.', barrier:'Requires a parent/carer at home full-time. Social isolation risk. No automatic peer group. Christodoulou might argue: no guarantee of foundational knowledge either.' },
+];
+const COMP_STUDENTS = [
+  { name:'Student A', desc:'Parents both work. No car. Lives on an estate four miles from town.', has:['School label residue'], lacks:['Sports club','Summer camp','Music lessons','Family holiday'], barrier:'No transport, no budget. Six weeks indoors. The identity school built has no replacement.', access:'' },
+  { name:'Student B', desc:'Mum is a teaching assistant. One sibling. Attends church on Sundays.', has:['Church youth group','Library card','One week at Nan\'s'], lacks:['Paid clubs','Holiday abroad'], barrier:'Limited but present community.', access:'Faith group provides continuity — free, portable, identity-affirming' },
+  { name:'Student C', desc:'Two-parent household, both graduates. Lives in suburb with garden.', has:['Tennis camp','Coding club','Family holiday','Piano teacher'], lacks:[], barrier:'', access:'Full access to structured, identity-affirming summer activities. The progressive ideal — realised through purchasing power.' },
+  { name:'Student D', desc:'Neurodivergent (undiagnosed). Masked all year. Good grades. "No concerns."', has:['Good grades memory'], lacks:['Diagnosis','Language for distress','Peer group outside school','The mask\'s audience'], barrier:'Without school, the mask has no stage. Does not know who they are without it.', access:'' },
+];
+
+let wornItems = [];
+let currentPeriod = 0;
+let meterValue = 0;
+let bellRung = false;
+let dayComplete = false;
+const clothesGroup = document.getElementById('clothesGroup');
+
+function updateMeter(value, status) {
+  meterValue = Math.max(0, Math.min(100, value));
+  const fill = document.getElementById('meterFill');
+  const pct = document.getElementById('meterPercent');
+  const stat = document.getElementById('meterStatus');
+  fill.style.width = meterValue + '%';
+  pct.textContent = Math.round(meterValue) + '%';
+  if (status) stat.textContent = status;
+  if (meterValue > 65) fill.style.background = 'var(--crayon-green)';
+  else if (meterValue > 35) fill.style.background = 'var(--crayon-yellow)';
+  else fill.style.background = 'var(--crayon-red)';
+}
+function placeOnMannequin(name, cat, isTacit) {
+  const shape = GARMENT_SHAPES[cat]; const colors = CAT_FILLS[cat];
+  if (!shape || !colors) return;
+  const ns = 'http://www.w3.org/2000/svg';
+  const g = document.createElementNS(ns, 'g');
+  g.classList.add('garment', 'garment-appear');
+  if (isTacit) g.classList.add('tacit');
+  g.setAttribute('data-name', name); g.setAttribute('data-cat', cat);
+  const p = document.createElementNS(ns, 'path');
+  p.classList.add('garment-shape'); p.setAttribute('d', shape.path);
+  p.setAttribute('fill', colors.fill); p.setAttribute('stroke', colors.stroke);
+  p.setAttribute('stroke-width', '1.5'); p.setAttribute('opacity', '0.88');
+  g.appendChild(p);
+  const txt = document.createElementNS(ns, 'text');
+  txt.setAttribute('x', '120'); txt.setAttribute('y', String(shape.textY));
+  txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('fill', colors.text);
+  txt.setAttribute('font-size', cat === 'hidden' ? '7' : '10');
+  txt.textContent = name; g.appendChild(txt);
+  clothesGroup.appendChild(g);
+  wornItems.push({ name, cat, isTacit });
+  document.getElementById('wornCount').textContent = wornItems.length + ' item' + (wornItems.length !== 1 ? 's' : '') + ' worn';
+}
+const dayPanel = document.getElementById('dayPanel');
+PERIODS.forEach((period, pIdx) => {
+  const card = document.createElement('div');
+  card.className = 'period-card' + (pIdx === 0 ? ' current' : ' locked');
+  card.id = 'period-' + period.id;
+  card.innerHTML = `<div class="period-header"><h3>${period.icon} ${period.title}</h3><span class="period-time">${period.time}</span></div><p class="period-desc">${period.desc}</p><div class="period-choices" id="choices-${period.id}">${period.items.map((item, i) => `<div class="choice-item" data-cat="${period.cat}" data-idx="${i}" data-name="${item.name}">${item.name}</div>`).join('')}</div>`;
+  dayPanel.appendChild(card);
+});
+document.getElementById('meterContainer').classList.add('active');
+updateMeter(0, 'Blank — no identity yet');
+activatePeriod(0);
+function activatePeriod(idx) {
+  if (idx >= PERIODS.length) { finishDay(); return; }
+  currentPeriod = idx;
+  const period = PERIODS[idx];
+  const card = document.getElementById('period-' + period.id);
+  card.className = 'period-card current';
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const choiceEls = document.querySelectorAll(`#choices-${period.id} .choice-item`);
+  choiceEls.forEach(el => {
+    el.addEventListener('click', function handler() {
+      if (el.classList.contains('chosen') || el.classList.contains('unchosen')) return;
+      makeChoice(idx, parseInt(el.getAttribute('data-idx')));
+      choiceEls.forEach(c => c.removeEventListener('click', handler));
+    });
+  });
+}
+function makeChoice(periodIdx, itemIdx) {
+  const period = PERIODS[periodIdx];
+  const card = document.getElementById('period-' + period.id);
+  const choiceEls = document.querySelectorAll(`#choices-${period.id} .choice-item`);
+  choiceEls.forEach((el, i) => { if (i === itemIdx) el.classList.add('chosen'); else el.classList.add('unchosen'); });
+  card.className = 'period-card completed';
+  placeOnMannequin(period.items[itemIdx].name, period.cat, false);
+  updateMeter(meterValue + 18, 'You chose this one');
+  setTimeout(() => activatePeriod(periodIdx + 1), 800);
+}
+function finishDay() {
+  dayComplete = true;
+  updateMeter(meterValue, 'School day complete — but is this who you are?');
+  showStaffRoom();
+  document.getElementById('bellBtn').disabled = false;
+}
+function showStaffRoom() {
+  const area = document.getElementById('staffRoomArea');
+  area.style.display = 'block';
+  area.innerHTML = `<div class="staffroom-card" id="staffRoomCard"><div class="staffroom-lid" onclick="document.getElementById('staffRoomCard').classList.toggle('open')"><h3>📁 Staff Room File — Confidential</h3><span style="font-family:'Indie Flower',cursive;font-size:0.88rem;color:#999;">Click to open</span></div><div class="staffroom-contents"><p style="font-family:'Indie Flower',cursive;font-size:0.92rem;color:var(--crayon-red);margin-bottom:12px;">These labels were never shown to you. They exist in pastoral notes, staff emails, and target-setting spreadsheets. You are wearing them without knowing.</p>${TACIT_LABELS.map(t => `<div class="staffroom-entry">"${t.note}"<div class="staff-author">— ${t.author}</div></div>`).join('')}<div class="staffroom-theory"><strong>Tacit Labels and the Hidden Curriculum:</strong> Giroux and Penna (1979) argue that schools transmit values, expectations, and categorisations through a 'hidden curriculum'. Norms and labels that lie beyond formal course material but profoundly shape student experience.</div></div></div>`;
+  TACIT_LABELS.forEach(t => placeOnMannequin(t.name, 'hidden', true));
+  updateMeter(meterValue - 8, 'Labels you did not know you were wearing...');
+  area.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+const eventCardsEl = document.getElementById('eventCards');
+const eventResultEl = document.getElementById('eventResult');
+EVENTS.forEach(evt => {
+  const card = document.createElement('div');
+  card.className = 'event-card'; card.id = 'evt-'+evt.id;
+  card.innerHTML = `<div class="event-icon">${evt.icon}</div><h3>${evt.title}</h3><p>${evt.desc}</p>`;
+  card.addEventListener('click', () => selectEvent(evt));
+  eventCardsEl.appendChild(card);
+});
+function selectEvent(evt) {
+  resetEvent();
+  document.getElementById('evt-'+evt.id).classList.add('selected');
+  evt.result.lost.forEach(name => { clothesGroup.querySelectorAll('.garment').forEach(g => { if (g.getAttribute('data-name') === name) g.classList.add('lost'); }); });
+  evt.result.stigmatised.forEach(name => { clothesGroup.querySelectorAll('.garment').forEach(g => { if (g.getAttribute('data-name') === name) g.classList.add('stigmatised'); }); });
+  updateMeter(meterValue - 15, 'Identity destabilised by system change');
+  eventResultEl.innerHTML = `<div class="event-result-card"><h3>${evt.result.title}</h3><p>${evt.result.text}</p><div style="margin:12px 0 4px;font-family:'Caveat',cursive;font-size:1.05rem;color:var(--crayon-red);">Items lost:</div><div class="lost-items">${evt.result.lost.map(n=>`<div class="lost-item">${n}</div>`).join('')}</div><div style="margin:8px 0 4px;font-family:'Caveat',cursive;font-size:1.05rem;color:#6B3500;">Now carry stigma:</div><div class="lost-items">${evt.result.stigmatised.map(n=>`<div class="stigma-item">⚠ ${n}</div>`).join('')}</div><p style="margin-top:12px;font-size:0.92rem;color:#555;font-style:italic;">${evt.result.theory}</p></div><button class="try-another-btn" onclick="resetEvent()">↩ Reset & Try Another</button>`;
+  eventResultEl.classList.add('visible');
+}
+function resetEvent() {
+  eventResultEl.classList.remove('visible'); eventResultEl.innerHTML='';
+  document.querySelectorAll('.event-card').forEach(c=>c.classList.remove('selected'));
+  clothesGroup.querySelectorAll('.garment').forEach(g => g.classList.remove('lost','stigmatised'));
+  if(dayComplete) updateMeter(meterValue>50?meterValue:50, 'Reset — try another event');
+}
+document.getElementById('bellBtn').addEventListener('click', function(){
+  if(bellRung) return; bellRung=true;
+  this.disabled=true; this.textContent='🔔 The bell has rung...'; this.style.background='#999';
+  const garments = clothesGroup.querySelectorAll('.garment');
+  garments.forEach((g,i)=>{ setTimeout(()=>{ g.style.transition='opacity 0.6s ease'; g.style.opacity='0'; setTimeout(()=>g.remove(),600); }, i*150); });
+  updateMeter(0, '');
+  setTimeout(()=>{
+    document.getElementById('meterStatus').textContent='Identity: empty';
+    document.getElementById('strippedFigure').classList.add('visible');
+    const fl=document.getElementById('fallenLabels');
+    wornItems.forEach(item=>{ const f=document.createElement('div');f.className='fallen-label'; f.style.setProperty('--rot',(Math.random()*10-5)+'deg'); f.textContent=item.name; if(item.isTacit) f.style.fontStyle='italic'; fl.appendChild(f); });
+    fl.classList.add('visible');
+    document.getElementById('postStripQ').classList.add('visible');
+    document.getElementById('wornCount').textContent='All items removed.';
+    document.getElementById('wornCount').style.color='#999';
+    setTimeout(()=>document.getElementById('comparisonSection').classList.add('visible'),1200);
+  }, garments.length*150+700);
+});
+const compGrid = document.getElementById('comparisonGrid');
+COMP_STUDENTS.forEach(s => {
+  const card = document.createElement('div');
+  card.className = 'comp-student';
+  card.innerHTML = `<svg viewBox="0 0 240 480" xmlns="http://www.w3.org/2000/svg"><circle cx="120" cy="70" r="38" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/><path d="M85 108 Q120 102 155 108 L160 260 Q120 265 80 260 Z" fill="#E8DCC8" stroke="#C8B8A0" stroke-width="2"/><path d="M85 115 Q50 165 42 230" fill="none" stroke="#C8B8A0" stroke-width="13" stroke-linecap="round"/><path d="M155 115 Q190 165 198 230" fill="none" stroke="#C8B8A0" stroke-width="13" stroke-linecap="round"/><path d="M95 260 Q90 350 85 440" fill="none" stroke="#C8B8A0" stroke-width="15" stroke-linecap="round"/><path d="M145 260 Q150 350 155 440" fill="none" stroke="#C8B8A0" stroke-width="15" stroke-linecap="round"/><circle cx="108" cy="64" r="3.5" fill="#A89880"/><circle cx="132" cy="64" r="3.5" fill="#A89880"/><path d="M112 80 Q120 77 128 80" fill="none" stroke="#A89880" stroke-width="1.5" stroke-linecap="round"/></svg><h4>${s.name}</h4><div class="comp-desc">${s.desc}</div><div class="comp-items">${s.has.map(i=>`<div class="comp-item has">${i}</div>`).join('')}${s.lacks.map(i=>`<div class="comp-item lacks">${i}</div>`).join('')}</div>${s.barrier ? `<div class="comp-barrier">✗ ${s.barrier}</div>` : ''}${s.access ? `<div class="comp-access">✓ ${s.access}</div>` : ''}`;
+  compGrid.appendChild(card);
+});
+const altGrid = document.getElementById('altGrid');
+ALT_MODELS.forEach(m => {
+  const card = document.createElement('div');
+  card.className = 'alt-card fade-in';
+  card.innerHTML = `<div class="alt-icon">${m.icon}</div><h3>${m.name}</h3><div class="alt-items">${m.items.map(i=>`<div class="alt-item" style="background:${i.c};color:${i.t};">${i.name}</div>`).join('')}</div><div class="promise">✓ ${m.promise}</div><div class="barrier">✗ ${m.barrier}</div>`;
+  altGrid.appendChild(card);
+});
+const fadeObs = new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-in,.discipline-row').forEach(el=>fadeObs.observe(el));
+const secIds=['title-section','context-section','erikson-section','schoolday-section','disruption-section','strip-section','learningloss-section','question-section','contract-section','debate-section','zoomout-section','evidence-section','disciplines-section','neuro-section','reflection-section','reinvention-section','closing-section'];
+const secLabels=['Title','Context','Erikson','School Day','Disruption','Strip','Learning Loss','Question','Contract','Debate','Alternatives','Evidence','Disciplines','Neuro','Reflection','Reinvention','Close'];
+const navEl=document.getElementById('navDots');
+secIds.forEach((id,i)=>{const d=document.createElement('button');d.className='nav-dot';d.title=secLabels[i];d.addEventListener('click',()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}));navEl.appendChild(d);});
+const secObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const i=secIds.indexOf(x.target.id);if(i!==-1)document.querySelectorAll('.nav-dot').forEach((d,j)=>d.classList.toggle('active',j===i));}});},{threshold:0.2});
+secIds.forEach(id=>{const el=document.getElementById(id);if(el)secObs.observe(el);});
+</script>
+</body>
+</html>
